@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "sporting_directors",
+  "info": {
+    "singularName": "sporting-director",
+    "pluralName": "sporting-directors",
+    "displayName": "SportingDirector"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "surname": {
+      "type": "string"
+    },
+    "team": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::team.team"
+    }
+  }
+}

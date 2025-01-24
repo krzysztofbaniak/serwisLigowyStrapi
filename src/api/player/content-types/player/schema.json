@@ -1,0 +1,61 @@
+{
+  "kind": "collectionType",
+  "collectionName": "players",
+  "info": {
+    "singularName": "player",
+    "pluralName": "players",
+    "displayName": "Player",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "city": {
+      "type": "string"
+    },
+    "availableForTeams": {
+      "type": "boolean"
+    },
+    "invited": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::team.team"
+    },
+    "enrolled": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::team.team"
+    },
+    "position": {
+      "type": "enumeration",
+      "enum": [
+        "Bramkarz",
+        "Obrońca",
+        "Boczny obrońca",
+        "Pomocnik",
+        "Skrzydłowy",
+        "Napastnik"
+      ]
+    },
+    "birthday": {
+      "type": "date"
+    },
+    "experience": {
+      "type": "text"
+    },
+    "description": {
+      "type": "text"
+    },
+    "favoriteNumber": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "surname": {
+      "type": "string"
+    }
+  }
+}

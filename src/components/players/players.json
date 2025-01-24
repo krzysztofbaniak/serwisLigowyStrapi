@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_players_players",
+  "info": {
+    "displayName": "players",
+    "icon": "hashtag"
+  },
+  "options": {},
+  "attributes": {
+    "fullname": {
+      "type": "string"
+    },
+    "number": {
+      "type": "integer"
+    }
+  }
+}

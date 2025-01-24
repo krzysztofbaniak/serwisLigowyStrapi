@@ -1,0 +1,38 @@
+{
+  "kind": "collectionType",
+  "collectionName": "match_reports",
+  "info": {
+    "singularName": "match-report",
+    "pluralName": "match-reports",
+    "displayName": "MatchReport"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "events": {
+      "displayName": "event",
+      "type": "component",
+      "repeatable": true,
+      "component": "event.event"
+    },
+    "homePlayers": {
+      "displayName": "players",
+      "type": "component",
+      "repeatable": true,
+      "component": "players.players"
+    },
+    "awayPlayers": {
+      "type": "component",
+      "repeatable": true,
+      "component": "players.players"
+    },
+    "goals": {
+      "displayName": "goals",
+      "type": "component",
+      "repeatable": true,
+      "component": "goals.goals"
+    }
+  }
+}

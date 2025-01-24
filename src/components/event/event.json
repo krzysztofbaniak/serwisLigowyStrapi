@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_event_events",
+  "info": {
+    "displayName": "event",
+    "icon": "hashtag"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "minute": {
+      "type": "integer"
+    }
+  }
+}

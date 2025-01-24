@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_goals_goals",
+  "info": {
+    "displayName": "goals",
+    "icon": "hashtag"
+  },
+  "options": {},
+  "attributes": {
+    "player": {
+      "type": "string"
+    },
+    "team": {
+      "type": "enumeration",
+      "enum": [
+        "home",
+        "away"
+      ]
+    },
+    "penalty": {
+      "type": "boolean"
+    }
+  }
+}

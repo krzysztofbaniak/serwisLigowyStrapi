@@ -1,0 +1,76 @@
+{
+  "kind": "collectionType",
+  "collectionName": "matches",
+  "info": {
+    "singularName": "match",
+    "pluralName": "matches",
+    "displayName": "Match",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "homeTeam": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::team.team"
+    },
+    "awayTeam": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::team.team"
+    },
+    "datetime": {
+      "type": "datetime"
+    },
+    "location": {
+      "type": "string"
+    },
+    "referee": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::referee.referee"
+    },
+    "invited": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::referee.referee"
+    },
+    "enrolled": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::referee.referee"
+    },
+    "stage": {
+      "type": "string"
+    },
+    "voivodeship": {
+      "type": "enumeration",
+      "enum": [
+        "Dolnośląskie",
+        "Kujawsko-pomorskie",
+        "Lubelskie",
+        "Lubuskie",
+        "Łódzkie",
+        "Małopolskie",
+        "Mazowieckie",
+        "Opolskie",
+        "Podkarpackie",
+        "Podlaskie",
+        "Pomorskie",
+        "Śląskie",
+        "Świętokrzyskie",
+        "Warmińsko-mazurskie",
+        "Wielkopolskie",
+        "Zachodniopomorskie"
+      ]
+    },
+    "matchReport": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::match-report.match-report"
+    }
+  }
+}
