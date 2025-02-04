@@ -14,13 +14,15 @@
   "attributes": {
     "homeTeam": {
       "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::team.team"
+      "relation": "manyToOne",
+      "target": "api::team.team",
+      "inversedBy": "matches"
     },
     "awayTeam": {
       "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::team.team"
+      "relation": "manyToOne",
+      "target": "api::team.team",
+      "inversedBy": "matches"
     },
     "datetime": {
       "type": "datetime"
@@ -33,15 +35,17 @@
       "relation": "oneToOne",
       "target": "api::referee.referee"
     },
-    "invited": {
+    "invitedReferees": {
       "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::referee.referee"
+      "relation": "manyToMany",
+      "target": "api::referee.referee",
+      "inversedBy": "invitedMatches"
     },
-    "enrolled": {
+    "suggestedReferees": {
       "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::referee.referee"
+      "relation": "manyToMany",
+      "target": "api::referee.referee",
+      "inversedBy": "enrolledMatches"
     },
     "stage": {
       "type": "string"
@@ -71,6 +75,12 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::match-report.match-report"
+    },
+    "competition": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::competition.competition",
+      "inversedBy": "matches"
     }
   }
 }

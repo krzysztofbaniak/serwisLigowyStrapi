@@ -4,7 +4,8 @@
   "info": {
     "singularName": "match-report",
     "pluralName": "match-reports",
-    "displayName": "MatchReport"
+    "displayName": "MatchReport",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -33,6 +34,9 @@
       "type": "component",
       "repeatable": true,
       "component": "goals.goals"
+    },
+    "name": {
+      "type": "string"
     }
   }
 }

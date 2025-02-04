@@ -369,35 +369,53 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface ApiLeagueLeague extends Struct.CollectionTypeSchema {
-  collectionName: 'leagues';
+export interface ApiCompetitionCompetition extends Struct.CollectionTypeSchema {
+  collectionName: 'competitions';
   info: {
     description: '';
-    displayName: 'League';
-    pluralName: 'leagues';
-    singularName: 'league';
+    displayName: 'Competition';
+    pluralName: 'competitions';
+    singularName: 'competition';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
     city: Schema.Attribute.String;
+    competitionFormat: Schema.Attribute.Enumeration<
+      ['singleMatchLeague', 'twoLegLeague', 'singleMatchLadder', 'twoLegLadder']
+    >;
+    competitionType: Schema.Attribute.Enumeration<['tournament', 'league']>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    enrolled: Schema.Attribute.Relation<'oneToMany', 'api::team.team'>;
-    invited: Schema.Attribute.Relation<'oneToMany', 'api::team.team'>;
+    enrolledTeams: Schema.Attribute.Relation<'manyToMany', 'api::team.team'>;
+    invitedTeams: Schema.Attribute.Relation<'manyToMany', 'api::team.team'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
-      'api::league.league'
+      'api::competition.competition'
     > &
       Schema.Attribute.Private;
-    logotype: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    logotype: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
     matches: Schema.Attribute.Relation<'oneToMany', 'api::match.match'>;
     name: Schema.Attribute.String;
-    participants: Schema.Attribute.Relation<'oneToMany', 'api::team.team'>;
+    participatingTeams: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::team.team'
+    >;
     publishedAt: Schema.Attribute.DateTime;
+    relatedPosts: Schema.Attribute.Relation<'oneToMany', 'api::post.post'>;
+    reward: Schema.Attribute.String;
+    rules: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    slug: Schema.Attribute.UID<'name'>;
+    state: Schema.Attribute.Enumeration<['planned', 'inProgress', 'over']>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -427,6 +445,7 @@ export interface ApiLeagueLeague extends Struct.CollectionTypeSchema {
 export interface ApiMatchReportMatchReport extends Struct.CollectionTypeSchema {
   collectionName: 'match_reports';
   info: {
+    description: '';
     displayName: 'MatchReport';
     pluralName: 'match-reports';
     singularName: 'match-report';
@@ -448,6 +467,7 @@ export interface ApiMatchReportMatchReport extends Struct.CollectionTypeSchema {
       'api::match-report.match-report'
     > &
       Schema.Attribute.Private;
+    name: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -467,14 +487,20 @@ export interface ApiMatchMatch extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    awayTeam: Schema.Attribute.Relation<'oneToOne', 'api::team.team'>;
+    awayTeam: Schema.Attribute.Relation<'manyToOne', 'api::team.team'>;
+    competition: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::competition.competition'
+    >;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     datetime: Schema.Attribute.DateTime;
-    enrolled: Schema.Attribute.Relation<'oneToMany', 'api::referee.referee'>;
-    homeTeam: Schema.Attribute.Relation<'oneToOne', 'api::team.team'>;
-    invited: Schema.Attribute.Relation<'oneToMany', 'api::referee.referee'>;
+    homeTeam: Schema.Attribute.Relation<'manyToOne', 'api::team.team'>;
+    invitedReferees: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::referee.referee'
+    >;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::match.match'> &
       Schema.Attribute.Private;
@@ -486,6 +512,10 @@ export interface ApiMatchMatch extends Struct.CollectionTypeSchema {
     publishedAt: Schema.Attribute.DateTime;
     referee: Schema.Attribute.Relation<'oneToOne', 'api::referee.referee'>;
     stage: Schema.Attribute.String;
+    suggestedReferees: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::referee.referee'
+    >;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -559,10 +589,12 @@ export interface ApiPlayerPlayer extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     description: Schema.Attribute.Text;
+    enroledTeams: Schema.Attribute.Relation<'manyToMany', 'api::team.team'>;
     enrolled: Schema.Attribute.Relation<'oneToMany', 'api::team.team'>;
     experience: Schema.Attribute.Text;
     favoriteNumber: Schema.Attribute.Integer;
     invited: Schema.Attribute.Relation<'oneToMany', 'api::team.team'>;
+    invitedTeams: Schema.Attribute.Relation<'manyToMany', 'api::team.team'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -582,6 +614,7 @@ export interface ApiPlayerPlayer extends Struct.CollectionTypeSchema {
     >;
     publishedAt: Schema.Attribute.DateTime;
     surname: Schema.Attribute.String;
+    team: Schema.Attribute.Relation<'manyToOne', 'api::team.team'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -610,17 +643,17 @@ export interface ApiPostPost extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
     lead: Schema.Attribute.Text;
-    league: Schema.Attribute.Relation<'oneToOne', 'api::league.league'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::post.post'> &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
-    team: Schema.Attribute.Relation<'oneToOne', 'api::team.team'>;
-    title: Schema.Attribute.String;
-    tournament: Schema.Attribute.Relation<
-      'oneToOne',
-      'api::tournament.tournament'
+    relatedCompetition: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::competition.competition'
     >;
+    relatedTeams: Schema.Attribute.Relation<'manyToOne', 'api::team.team'>;
+    slug: Schema.Attribute.UID<'title'>;
+    title: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -643,6 +676,11 @@ export interface ApiRefereeReferee extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    enrolledMatches: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::match.match'
+    >;
+    invitedMatches: Schema.Attribute.Relation<'manyToMany', 'api::match.match'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -725,71 +763,37 @@ export interface ApiTeamTeam extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    enrolled: Schema.Attribute.Relation<'oneToMany', 'api::player.player'>;
-    invited: Schema.Attribute.Relation<'oneToMany', 'api::player.player'>;
+    enrolledTo: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::competition.competition'
+    >;
+    invitedPlayers: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::player.player'
+    >;
+    invitedTo: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::competition.competition'
+    >;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::team.team'> &
       Schema.Attribute.Private;
     logotype: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    matches: Schema.Attribute.Relation<'oneToMany', 'api::match.match'>;
     name: Schema.Attribute.String;
+    participatingIn: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::competition.competition'
+    >;
     players: Schema.Attribute.Relation<'oneToMany', 'api::player.player'>;
     publishedAt: Schema.Attribute.DateTime;
     recruiting: Schema.Attribute.Boolean;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    voivodeship: Schema.Attribute.Enumeration<
-      [
-        'Dolno\u015Bl\u0105skie',
-        'Kujawsko-pomorskie',
-        'Lubelskie',
-        'Lubuskie',
-        '\u0141\u00F3dzkie',
-        'Ma\u0142opolskie',
-        'Mazowieckie',
-        'Opolskie',
-        'Podkarpackie',
-        'Podlaskie',
-        'Pomorskie',
-        '\u015Al\u0105skie',
-        '\u015Awi\u0119tokrzyskie',
-        'Warmi\u0144sko-mazurskie',
-        'Wielkopolskie',
-        'Zachodniopomorskie',
-      ]
+    relatedPosts: Schema.Attribute.Relation<'oneToMany', 'api::post.post'>;
+    slug: Schema.Attribute.UID<'name'>;
+    suggestedPlayer: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::player.player'
     >;
-  };
-}
-
-export interface ApiTournamentTournament extends Struct.CollectionTypeSchema {
-  collectionName: 'tournaments';
-  info: {
-    description: '';
-    displayName: 'Tournament';
-    pluralName: 'tournaments';
-    singularName: 'tournament';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    city: Schema.Attribute.String;
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    enrolled: Schema.Attribute.Relation<'oneToMany', 'api::team.team'>;
-    invited: Schema.Attribute.Relation<'oneToMany', 'api::team.team'>;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::tournament.tournament'
-    > &
-      Schema.Attribute.Private;
-    logotype: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
-    matches: Schema.Attribute.Relation<'oneToMany', 'api::match.match'>;
-    name: Schema.Attribute.String;
-    participants: Schema.Attribute.Relation<'oneToMany', 'api::team.team'>;
-    publishedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1337,7 +1341,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
-      'api::league.league': ApiLeagueLeague;
+      'api::competition.competition': ApiCompetitionCompetition;
       'api::match-report.match-report': ApiMatchReportMatchReport;
       'api::match.match': ApiMatchMatch;
       'api::organizer.organizer': ApiOrganizerOrganizer;
@@ -1346,7 +1350,6 @@ declare module '@strapi/strapi' {
       'api::referee.referee': ApiRefereeReferee;
       'api::sporting-director.sporting-director': ApiSportingDirectorSportingDirector;
       'api::team.team': ApiTeamTeam;
-      'api::tournament.tournament': ApiTournamentTournament;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

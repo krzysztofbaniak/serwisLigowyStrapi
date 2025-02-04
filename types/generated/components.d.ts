@@ -3,12 +3,14 @@ import type { Schema, Struct } from '@strapi/strapi';
 export interface EventEvent extends Struct.ComponentSchema {
   collectionName: 'components_event_events';
   info: {
+    description: '';
     displayName: 'event';
     icon: 'hashtag';
   };
   attributes: {
     minute: Schema.Attribute.Integer;
     name: Schema.Attribute.String;
+    team: Schema.Attribute.Enumeration<['home', 'away']>;
   };
 }
 
@@ -28,12 +30,14 @@ export interface GoalsGoals extends Struct.ComponentSchema {
 export interface PlayersPlayers extends Struct.ComponentSchema {
   collectionName: 'components_players_players';
   info: {
+    description: '';
     displayName: 'players';
     icon: 'hashtag';
   };
   attributes: {
     fullname: Schema.Attribute.String;
     number: Schema.Attribute.Integer;
+    starter: Schema.Attribute.Boolean;
   };
 }
 

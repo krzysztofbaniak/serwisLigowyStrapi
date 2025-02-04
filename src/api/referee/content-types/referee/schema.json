@@ -41,6 +41,18 @@
     },
     "surname": {
       "type": "string"
+    },
+    "invitedMatches": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::match.match",
+      "mappedBy": "invitedReferees"
+    },
+    "enrolledMatches": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::match.match",
+      "mappedBy": "suggestedReferees"
     }
   }
 }

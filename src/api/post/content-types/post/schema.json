@@ -37,20 +37,21 @@
         "audios"
       ]
     },
-    "league": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::league.league"
+    "slug": {
+      "type": "uid",
+      "targetField": "title"
     },
-    "tournament": {
+    "relatedTeams": {
       "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::tournament.tournament"
+      "relation": "manyToOne",
+      "target": "api::team.team",
+      "inversedBy": "relatedPosts"
     },
-    "team": {
+    "relatedCompetition": {
       "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::team.team"
+      "relation": "manyToOne",
+      "target": "api::competition.competition",
+      "inversedBy": "relatedPosts"
     }
   }
 }

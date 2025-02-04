@@ -16,27 +16,30 @@
       "type": "string"
     },
     "logotype": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
       "allowedTypes": [
         "images",
         "files",
         "videos",
         "audios"
-      ],
-      "type": "media",
-      "multiple": false
+      ]
     },
     "recruiting": {
       "type": "boolean"
     },
-    "invited": {
+    "invitedPlayers": {
       "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::player.player"
+      "relation": "manyToMany",
+      "target": "api::player.player",
+      "inversedBy": "invitedTeams"
     },
-    "enrolled": {
+    "suggestedPlayer": {
       "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::player.player"
+      "relation": "manyToMany",
+      "target": "api::player.player",
+      "inversedBy": "enroledTeams"
     },
     "voivodeship": {
       "type": "enumeration",
@@ -65,7 +68,42 @@
     "players": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::player.player"
+      "target": "api::player.player",
+      "mappedBy": "team"
+    },
+    "matches": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::match.match",
+      "mappedBy": "awayTeam"
+    },
+    "relatedPosts": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::post.post",
+      "mappedBy": "relatedTeams"
+    },
+    "participatingIn": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::competition.competition",
+      "mappedBy": "participatingTeams"
+    },
+    "invitedTo": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::competition.competition",
+      "mappedBy": "invitedTeams"
+    },
+    "enrolledTo": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::competition.competition",
+      "mappedBy": "enrolledTeams"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name"
     }
   }
 }

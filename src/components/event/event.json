@@ -2,7 +2,8 @@
   "collectionName": "components_event_events",
   "info": {
     "displayName": "event",
-    "icon": "hashtag"
+    "icon": "hashtag",
+    "description": ""
   },
   "options": {},
   "attributes": {
@@ -11,6 +12,13 @@
     },
     "minute": {
       "type": "integer"
+    },
+    "team": {
+      "type": "enumeration",
+      "enum": [
+        "home",
+        "away"
+      ]
     }
   }
 }
