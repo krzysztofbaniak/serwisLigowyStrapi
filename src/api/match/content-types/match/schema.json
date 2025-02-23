@@ -81,6 +81,9 @@
       "relation": "manyToOne",
       "target": "api::competition.competition",
       "inversedBy": "matches"
+    },
+    "lookingForReferee": {
+      "type": "boolean"
     }
   }
 }

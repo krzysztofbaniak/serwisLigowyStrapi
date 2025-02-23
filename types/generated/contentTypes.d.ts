@@ -391,6 +391,10 @@ export interface ApiCompetitionCompetition extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     enrolledTeams: Schema.Attribute.Relation<'manyToMany', 'api::team.team'>;
     invitedTeams: Schema.Attribute.Relation<'manyToMany', 'api::team.team'>;
+    leagueTable: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::league-table.league-table'
+    >;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -416,6 +420,10 @@ export interface ApiCompetitionCompetition extends Struct.CollectionTypeSchema {
     >;
     slug: Schema.Attribute.UID<'name'>;
     state: Schema.Attribute.Enumeration<['planned', 'inProgress', 'over']>;
+    tournamentLadder: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::tournament-ladder.tournament-ladder'
+    >;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -439,6 +447,39 @@ export interface ApiCompetitionCompetition extends Struct.CollectionTypeSchema {
         'Zachodniopomorskie',
       ]
     >;
+  };
+}
+
+export interface ApiLeagueTableLeagueTable extends Struct.CollectionTypeSchema {
+  collectionName: 'league_tables';
+  info: {
+    description: '';
+    displayName: 'LeagueTable';
+    pluralName: 'league-tables';
+    singularName: 'league-table';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::league-table.league-table'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    relatedCompetition: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::competition.competition'
+    >;
+    tableEntries: Schema.Attribute.Component<'table.table', true>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
   };
 }
 
@@ -505,6 +546,7 @@ export interface ApiMatchMatch extends Struct.CollectionTypeSchema {
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::match.match'> &
       Schema.Attribute.Private;
     location: Schema.Attribute.String;
+    lookingForReferee: Schema.Attribute.Boolean;
     matchReport: Schema.Attribute.Relation<
       'oneToOne',
       'api::match-report.match-report'
@@ -542,6 +584,41 @@ export interface ApiMatchMatch extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiNotificationNotification
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'notifications';
+  info: {
+    description: '';
+    displayName: 'Notification';
+    pluralName: 'notifications';
+    singularName: 'notification';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::notification.notification'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    seen: Schema.Attribute.Boolean;
+    text: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    user: Schema.Attribute.Relation<
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+  };
+}
+
 export interface ApiOrganizerOrganizer extends Struct.CollectionTypeSchema {
   collectionName: 'organizers';
   info: {
@@ -567,6 +644,10 @@ export interface ApiOrganizerOrganizer extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    user: Schema.Attribute.Relation<
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
   };
 }
 
@@ -593,6 +674,7 @@ export interface ApiPlayerPlayer extends Struct.CollectionTypeSchema {
     enrolled: Schema.Attribute.Relation<'oneToMany', 'api::team.team'>;
     experience: Schema.Attribute.Text;
     favoriteNumber: Schema.Attribute.Integer;
+    image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
     invited: Schema.Attribute.Relation<'oneToMany', 'api::team.team'>;
     invitedTeams: Schema.Attribute.Relation<'manyToMany', 'api::team.team'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
@@ -618,6 +700,30 @@ export interface ApiPlayerPlayer extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    user: Schema.Attribute.Relation<
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    voivodeship: Schema.Attribute.Enumeration<
+      [
+        'Dolno\u015Bl\u0105skie',
+        'Kujawsko-pomorskie',
+        'Lubelskie',
+        'Lubuskie',
+        '\u0141\u00F3dzkie',
+        'Ma\u0142opolskie',
+        'Mazowieckie',
+        'Opolskie',
+        'Podkarpackie',
+        'Podlaskie',
+        'Pomorskie',
+        '\u015Al\u0105skie',
+        '\u015Awi\u0119tokrzyskie',
+        'Warmi\u0144sko-mazurskie',
+        'Wielkopolskie',
+        'Zachodniopomorskie',
+      ]
+    >;
   };
 }
 
@@ -633,10 +739,7 @@ export interface ApiPostPost extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    author: Schema.Attribute.Relation<
-      'oneToOne',
-      'plugin::users-permissions.user'
-    >;
+    author: Schema.Attribute.String;
     content: Schema.Attribute.RichText;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -646,17 +749,78 @@ export interface ApiPostPost extends Struct.CollectionTypeSchema {
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::post.post'> &
       Schema.Attribute.Private;
+    owner: Schema.Attribute.Relation<
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    public: Schema.Attribute.Boolean;
     publishedAt: Schema.Attribute.DateTime;
     relatedCompetition: Schema.Attribute.Relation<
       'manyToOne',
       'api::competition.competition'
     >;
     relatedTeams: Schema.Attribute.Relation<'manyToOne', 'api::team.team'>;
-    slug: Schema.Attribute.UID<'title'>;
+    slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
     title: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+  };
+}
+
+export interface ApiRecruitmentRecruitment extends Struct.CollectionTypeSchema {
+  collectionName: 'recruitments';
+  info: {
+    description: '';
+    displayName: 'Recruitment';
+    pluralName: 'recruitments';
+    singularName: 'recruitment';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    active: Schema.Attribute.Boolean;
+    city: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    datetime: Schema.Attribute.DateTime;
+    description: Schema.Attribute.Text;
+    image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::recruitment.recruitment'
+    > &
+      Schema.Attribute.Private;
+    location: Schema.Attribute.String;
+    name: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    team: Schema.Attribute.Relation<'manyToOne', 'api::team.team'>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    voivodeship: Schema.Attribute.Enumeration<
+      [
+        'Dolno\u015Bl\u0105skie',
+        'Kujawsko-pomorskie',
+        'Lubelskie',
+        'Lubuskie',
+        '\u0141\u00F3dzkie',
+        'Ma\u0142opolskie',
+        'Mazowieckie',
+        'Opolskie',
+        'Podkarpackie',
+        'Podlaskie',
+        'Pomorskie',
+        '\u015Al\u0105skie',
+        '\u015Awi\u0119tokrzyskie',
+        'Warmi\u0144sko-mazurskie',
+        'Wielkopolskie',
+        'Zachodniopomorskie',
+      ]
+    >;
   };
 }
 
@@ -680,6 +844,7 @@ export interface ApiRefereeReferee extends Struct.CollectionTypeSchema {
       'manyToMany',
       'api::match.match'
     >;
+    image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
     invitedMatches: Schema.Attribute.Relation<'manyToMany', 'api::match.match'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -693,6 +858,10 @@ export interface ApiRefereeReferee extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    user: Schema.Attribute.Relation<
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
     voivodeship: Schema.Attribute.Enumeration<
       [
         'Dolno\u015Bl\u0105skie',
@@ -720,6 +889,7 @@ export interface ApiSportingDirectorSportingDirector
   extends Struct.CollectionTypeSchema {
   collectionName: 'sporting_directors';
   info: {
+    description: '';
     displayName: 'SportingDirector';
     pluralName: 'sporting-directors';
     singularName: 'sporting-director';
@@ -728,9 +898,11 @@ export interface ApiSportingDirectorSportingDirector
     draftAndPublish: true;
   };
   attributes: {
+    city: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -744,6 +916,30 @@ export interface ApiSportingDirectorSportingDirector
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    user: Schema.Attribute.Relation<
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    voivodeship: Schema.Attribute.Enumeration<
+      [
+        'Dolno\u015Bl\u0105skie',
+        'Kujawsko-pomorskie',
+        'Lubelskie',
+        'Lubuskie',
+        '\u0141\u00F3dzkie',
+        'Ma\u0142opolskie',
+        'Mazowieckie',
+        'Opolskie',
+        'Podkarpackie',
+        'Podlaskie',
+        'Pomorskie',
+        '\u015Al\u0105skie',
+        '\u015Awi\u0119tokrzyskie',
+        'Warmi\u0144sko-mazurskie',
+        'Wielkopolskie',
+        'Zachodniopomorskie',
+      ]
+    >;
   };
 }
 
@@ -788,8 +984,16 @@ export interface ApiTeamTeam extends Struct.CollectionTypeSchema {
     players: Schema.Attribute.Relation<'oneToMany', 'api::player.player'>;
     publishedAt: Schema.Attribute.DateTime;
     recruiting: Schema.Attribute.Boolean;
+    recruitments: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::recruitment.recruitment'
+    >;
     relatedPosts: Schema.Attribute.Relation<'oneToMany', 'api::post.post'>;
     slug: Schema.Attribute.UID<'name'>;
+    sportingDirector: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::sporting-director.sporting-director'
+    >;
     suggestedPlayer: Schema.Attribute.Relation<
       'manyToMany',
       'api::player.player'
@@ -817,6 +1021,40 @@ export interface ApiTeamTeam extends Struct.CollectionTypeSchema {
         'Zachodniopomorskie',
       ]
     >;
+  };
+}
+
+export interface ApiTournamentLadderTournamentLadder
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'tournament_ladders';
+  info: {
+    description: '';
+    displayName: 'TournamentLadder';
+    pluralName: 'tournament-ladders';
+    singularName: 'tournament-ladder';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::tournament-ladder.tournament-ladder'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    relatedCompetition: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::competition.competition'
+    >;
+    stages: Schema.Attribute.Component<'stage.stage', true>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
   };
 }
 
@@ -1277,6 +1515,9 @@ export interface PluginUsersPermissionsUser
     draftAndPublish: false;
   };
   attributes: {
+    accountType: Schema.Attribute.Enumeration<
+      ['referee', 'player', 'organizer', 'sportingDirector']
+    >;
     blocked: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     confirmationToken: Schema.Attribute.String & Schema.Attribute.Private;
     confirmed: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
@@ -1342,14 +1583,18 @@ declare module '@strapi/strapi' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
       'api::competition.competition': ApiCompetitionCompetition;
+      'api::league-table.league-table': ApiLeagueTableLeagueTable;
       'api::match-report.match-report': ApiMatchReportMatchReport;
       'api::match.match': ApiMatchMatch;
+      'api::notification.notification': ApiNotificationNotification;
       'api::organizer.organizer': ApiOrganizerOrganizer;
       'api::player.player': ApiPlayerPlayer;
       'api::post.post': ApiPostPost;
+      'api::recruitment.recruitment': ApiRecruitmentRecruitment;
       'api::referee.referee': ApiRefereeReferee;
       'api::sporting-director.sporting-director': ApiSportingDirectorSportingDirector;
       'api::team.team': ApiTeamTeam;
+      'api::tournament-ladder.tournament-ladder': ApiTournamentLadderTournamentLadder;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

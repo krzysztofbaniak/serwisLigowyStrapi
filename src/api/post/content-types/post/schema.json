@@ -18,11 +18,6 @@
     "content": {
       "type": "richtext"
     },
-    "author": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "plugin::users-permissions.user"
-    },
     "lead": {
       "type": "text"
     },
@@ -39,7 +34,8 @@
     },
     "slug": {
       "type": "uid",
-      "targetField": "title"
+      "targetField": "title",
+      "required": true
     },
     "relatedTeams": {
       "type": "relation",
@@ -52,6 +48,17 @@
       "relation": "manyToOne",
       "target": "api::competition.competition",
       "inversedBy": "relatedPosts"
+    },
+    "author": {
+      "type": "string"
+    },
+    "public": {
+      "type": "boolean"
+    },
+    "owner": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
     }
   }
 }

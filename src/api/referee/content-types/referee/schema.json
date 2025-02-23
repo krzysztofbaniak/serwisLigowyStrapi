@@ -53,6 +53,22 @@
       "relation": "manyToMany",
       "target": "api::match.match",
       "mappedBy": "suggestedReferees"
+    },
+    "image": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": false
+    },
+    "user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "refereeProfile"
     }
   }
 }

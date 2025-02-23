@@ -104,6 +104,18 @@
     "slug": {
       "type": "uid",
       "targetField": "name"
+    },
+    "recruitments": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::recruitment.recruitment",
+      "mappedBy": "team"
+    },
+    "sportingDirector": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::sporting-director.sporting-director",
+      "inversedBy": "team"
     }
   }
 }

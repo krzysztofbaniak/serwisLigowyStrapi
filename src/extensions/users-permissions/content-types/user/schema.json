@@ -68,22 +68,35 @@
     "organizerProfile": {
       "type": "relation",
       "relation": "oneToOne",
-      "target": "api::organizer.organizer"
+      "target": "api::organizer.organizer",
+      "inversedBy": "user"
     },
     "playerProfile": {
       "type": "relation",
       "relation": "oneToOne",
-      "target": "api::player.player"
+      "target": "api::player.player",
+      "mappedBy": "user"
     },
     "refereeProfile": {
       "type": "relation",
       "relation": "oneToOne",
-      "target": "api::referee.referee"
+      "target": "api::referee.referee",
+      "inversedBy": "user"
     },
     "sportingDirectorProfile": {
       "type": "relation",
       "relation": "oneToOne",
-      "target": "api::sporting-director.sporting-director"
+      "target": "api::sporting-director.sporting-director",
+      "mappedBy": "user"
+    },
+    "accountType": {
+      "type": "enumeration",
+      "enum": [
+        "referee",
+        "player",
+        "organizer",
+        "sportingDirector"
+      ]
     }
   }
 }
